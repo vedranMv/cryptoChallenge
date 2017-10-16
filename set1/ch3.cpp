@@ -30,13 +30,8 @@ int main()
         string ret = FixedASCIIXOR(b1ASCII, key);
 
         //  Evaluate returned string
-        //  Discard all strings which contain special characters
-        bool failed = false;
-        for (int j = 0; (j < ret.length()) && !failed; j++)
-            if ((ret[j] < 31) || (ret[j] > 127))
-                failed = true;
-
-        if (!failed)
+        //  Discard all strings which contain special & control characters
+        if (validASCIIString(ret))
             cout <<"Key: "<< key<<", \tResult: " << ret << endl;
     }
 

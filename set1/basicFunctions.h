@@ -184,7 +184,7 @@ string HexstrToASCIIstr(string const &arg)
     string retVal;
     uint32_t i = 0;
 
-    retVal.resize(arg.length()/2+1, 0);
+    retVal.resize(arg.length()/2, 0);
 
     for (i; i < arg.length(); i+=2)
     {
@@ -194,3 +194,48 @@ string HexstrToASCIIstr(string const &arg)
     return retVal;
 }
 
+/**
+ *  Checks if input string consists of valid characters. Use bool selectors to
+ *  choose valid groups of characters
+ *  @param lc Allows for lower-case letters in string
+ *  @param uc Allows for upper-case letters in string
+ *  @param num Allows for numbers in string
+ *  @param sent Allows for sentence chars in string (!',.:;)
+ *  @param comm Allows for characters used in common slang #$&+-
+ *  @param spec Allows for special chars in string (not in all the other rules)
+ *  @param cont Allows for control chars in string (ASCII < 32)
+ *  @return True if string passed all requirements, false if it didn't
+ */
+bool validASCIIString(string const &arg, bool lc = true, bool uc = true,
+                      bool num = true, bool sent = true, bool comm = true,
+                      bool spec = false, bool cont = false)
+{
+    bool valid = true;
+
+    for (int i = 0; (i < arg.length()) && valid; i++)
+    {
+        //  Check if it's upper case and we want upper case
+        if ((arg[i] > 64) && (arg[i] < 91))
+            valid &= uc;
+        //  Check if it's lower case and we want lower case
+        else if ((arg[i] > 96) && (arg[i] < 123))
+            valid &= lc;
+        //  Check if it's number and we want number
+        else if ((arg[i] > 47) && (arg[i] < 58))
+            valid &= num;
+        //  Check if it's sentence punctuation (!'",.:;) ()/
+        else if ((arg[i] == 32) || (arg[i] == 33) || (arg[i] == 34) ||
+                 (arg[i] == 39) || (arg[i] == 44) || (arg[i] == 46) ||
+                 (arg[i] == 58) || (arg[i] == 59) || (arg[i] == 63))
+            valid &= sent;
+        else if (((arg[i] > 34) && (arg[i] < 44)) || (arg[i] == 42)
+                 || (arg[i] == 43) || (arg[i] == 45) || (arg[i] == 47) || (arg[i] == 10) || (arg[i] == 13))
+            valid &=comm;
+        else if ((arg[i] < 32) || (arg[i] == 127))
+            valid &= cont;
+        else
+            valid &= spec;
+    }
+
+    return valid;
+}
