@@ -1,9 +1,10 @@
 /**
- *    Title
- *    Description
+ *  Detect single-character XOR
+ *  From a list of ciphers find which one has been encrypted by XORing with a
+ *  single character key.
  *
- *    Created: 14. Oct 2017.
- *    Author: Vedran Mikov
+ *  Created: 16. Oct 2017.
+ *  Author: Vedran Mikov
  */
 #include <cstdlib>
 #include <cstdio>
@@ -12,17 +13,6 @@
 #include "basicFunctions.h"
 
 using namespace std;
-
-bool validSentence(string const &arg)
-{
-    bool valid = false;
-
-    if ((arg[0] > 64) && (arg[0] < 91))
-        valid = true;
-    //  Check if it's lower case and we want lower case
-    else if ((arg[0] > 96) && (arg[0] < 123))
-        valid = true;
-}
 
 int main()
 {
@@ -49,9 +39,7 @@ int main()
             //  Evaluate returned string
             //  Discard all strings which contain special characters
             if (validASCIIString(ret,true,true,true,true,true,false,false))
-                //if (validSentence(ret))
-                //cout <<"Key: "<< key<<", \tResult: " << ret;
-                cout<<ret<<endl;
+                cout <<"Key: "<< key<<", \tResult: " << ret;
         }
     }
     file.close();

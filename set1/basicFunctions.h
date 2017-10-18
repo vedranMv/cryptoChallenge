@@ -15,7 +15,31 @@ using namespace std;
 const string charSet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /**
- *  Convert input ASCII string into a base64 string
+ *  Mapping of Base64 character set to integer numbers they represent (0-63)
+ *  @param arg Input digit/char of Base64 string
+ *  @return Integer value in range 0-63 corresponding to input digit
+ */
+uint8_t B64CharToInt(uint8_t arg)
+{
+    //  Upper case letters map to 0-25
+    if ((arg > 64) && (arg < 91))
+        return (arg - 65);
+    //  Lower case letters map to 26-51
+    if ((arg > 96) && (arg < 123))
+        return (arg - 97 + 26);
+    //  Numbers map to 52-61
+    if ((arg > 47) && (arg < 58))
+        return (arg - 48 + 52);
+    //  '+' is 62
+    if (arg == '+')
+        return 62;
+    //  '/' is 63
+    if (arg == '/')
+        return 63;
+}
+
+/**
+ *  Convert input ASCII string into a Base64 string
  *  @param arg Input ASCII string
  *  @return Corresponding Base64 string
  */
@@ -24,7 +48,10 @@ string ASCIItoBase64(string const &arg)
     string retVal;
     uint32_t b64Len = 0, b64Pad = 0;
 
-    //  Calculate length of output b64 string and 0 padding
+    //  Calculate length of output b64 string and 0 padding. If input string has
+    //  length dividable by 3 then no padding is needed, if not, padding is
+    //  equal to difference between first multiple of 3 larger than string's len
+    //  and string's len
     if ((arg.length() % 3) != 0) {
         b64Pad = 3 - (arg.length() % 3);
         b64Len = (1+arg.length()/3)*4 - b64Pad;
@@ -86,7 +113,7 @@ int8_t IntToHexChar (uint8_t const &arg)
 }
 
 /**
- *  Convert input HEX string into a base64 string
+ *  Convert input HEX string into a Base64 string
  *  @param arg Input HEX string
  *  @return Corresponding Base64 string
  */
@@ -128,6 +155,51 @@ string HextoBase64(string const &arg)
 
     for (int8_t j = 0; j < b64Pad; j++)
         retVal += "=";
+
+    return retVal;
+}
+
+/**
+ *  Convert input Base64 string into a HEX string
+ *  @param arg Input Base64 string
+ *  @return Corresponding HEX string
+ */
+string Base64ToHex(string const &arg)
+{
+    string retVal;
+    uint32_t b64Len = 0, b64Pad = 0;
+
+    //  Find length and padding of b64 input
+    b64Len = arg.length();
+    for (uint32_t i = (b64Len-1); 1==1 ; i--)
+        if (arg[i] == '=')
+            b64Pad++;
+        else
+            break;
+
+    //  Set the length on data part of Base64
+    b64Len -= b64Pad;
+
+    //  Length of HEX is simply length data part of Base64*6/4 (since B64 takes
+    //  6 bits to encode one sign and HEX only 4) reduced by the number of
+    //  padded zeros to B64 string)
+    //  Allocate memory for output string
+    retVal.resize(b64Len*6/4-b64Pad*2, 0);
+
+    //  Process input string by taking 4 chars at the time, combine them into a
+    //  single decimal number of 24bit that can be split in 4bit HEX chunks
+    for (uint32_t i = 0; i < b64Len; i += 4)
+    {
+        uint32_t chunk24bit = 0;
+
+        //  Accumulate 4 (or max avail. less than 4) b64 digits(3 bytes) in a row
+        for (uint32_t j = 0; (j < 4) && ((i+j) < b64Len); j++)
+            chunk24bit |= ((uint32_t)B64CharToInt(arg[j+i]))<<((3-j)*6);
+
+        //  Split accumulated 24-bit chunk in six 4-bit chunks, HEX digits
+        for (uint32_t j = 5; (j >= 0) && ((i/4)*6 + (5-j)) < retVal.length(); j--)
+            retVal[(i/4)*6 + (5-j)] = IntToHexChar((chunk24bit >> (4*j)) & 0x0F);
+    }
 
     return retVal;
 }
@@ -195,6 +267,32 @@ string HexstrToASCIIstr(string const &arg)
 }
 
 /**
+ *  Convert input ASCII string to hex string. Additionally, if length is supplied
+ *  function will repeat input string for as many time needed to reach the length.
+ *  Example: if arg="okl" and length=7 function returns "okloklo"
+ *  @param arg ASCII string to convert to HEX
+ *  @param length (optional) length of output string
+ */
+string ASCIIstrToHexstr(string const &arg, uint32_t length = 0)
+{
+    string retVal;
+
+    if (length == 0)
+        length = arg.length()*2;
+
+    retVal.resize(length, 0);
+
+    for (int i = 0; i <length; i+=2)
+    {
+//        cout<< ((arg[((i/2)%arg.length())]>>4) & 0x0F) << " : "<<(arg[((i/2)%arg.length())] & 0x0F)<<endl;
+        retVal[i] = IntToHexChar((arg[((i/2)%arg.length())]>>4) & 0x0F);
+        retVal[i+1] = IntToHexChar(arg[((i/2)%arg.length())] & 0x0F);
+    }
+
+    return retVal;
+}
+
+/**
  *  Checks if input string consists of valid characters. Use bool selectors to
  *  choose valid groups of characters
  *  @param lc Allows for lower-case letters in string
@@ -238,4 +336,16 @@ bool validASCIIString(string const &arg, bool lc = true, bool uc = true,
     }
 
     return valid;
+}
+
+
+string ASCIIRepeatKeyXOR(string const &text, string const &key)
+{
+    //  Convert text to hex
+    string txtHex = ASCIIstrToHexstr(text);
+    //  Convert key to hex and repeat it as many times as need to have the same
+    //  length as text
+    string keyHex = ASCIIstrToHexstr(key, txtHex.length());
+
+    return FixedHEXXOR(txtHex, keyHex);
 }
