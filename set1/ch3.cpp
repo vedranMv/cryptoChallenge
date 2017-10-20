@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
-#include "basicFunctions.h"
+#include "../libs/basicFunctions.h"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ int main()
     //  HEX-encoded cypher
     string  b1 = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
     //  Convert HEX string to ASCII string
-    string b1ASCII = HexstrToASCIIstr(b1);
+    string b1ASCII = HexToASCII(b1);
 
     //  Loop through all 128 possible hex characters in an attempt to brute-force
     //  decription with all possible single-char keys
@@ -31,7 +31,7 @@ int main()
             key[j] = i;
 
         //  Perform Fixed XOR operation on ASCII strings
-        string ret = FixedASCIIXOR(b1ASCII, key);
+        string ret = ASCIIFixedXOR(b1ASCII, key);
 
         //  Evaluate returned string
         //  Discard all strings which contain special & control characters

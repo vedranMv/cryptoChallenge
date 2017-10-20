@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
-#include "basicFunctions.h"
+#include "../libs/basicFunctions.h"
 
 using namespace std;
 
@@ -20,7 +20,7 @@ int main()
             b2 = "686974207468652062756c6c277320657965";
 
     //  Result of fixed XOR between strings
-    string ret = FixedHEXXOR(b1, b2);
+    string ret = HexFixedXOR(b1, b2);
     cout << ret << endl;
 
     return 0;

@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>
-#include "basicFunctions.h"
+#include "../libs/basicFunctions.h"
 
 using namespace std;
 
@@ -19,7 +19,7 @@ int main()
     string  b1 = "Burning 'em, if you ain't quick and nimble\nI go crazy when I hear a cymbal",
             key = "ICE";
 
-    string ret = ASCIIRepeatKeyXOR(b1, key);
+    string ret = ASCIIToHex(ASCIIRepeatKeyXOR(b1, key));
     cout<<ret<<endl;
 
     return 0;

@@ -5,4 +5,5 @@
 !*.h
 !*.cpp
 *.o
+*.a
 !.gitignore

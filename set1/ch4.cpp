@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <iostream>
 #include <fstream>
-#include "basicFunctions.h"
+#include "../libs/basicFunctions.h"
 
 using namespace std;
 
@@ -25,7 +25,7 @@ int main()
     while (getline(file, b1))
     {
             //  Convert HEX string to ASCII string
-            string b1ASCII = HexstrToASCIIstr(b1);
+            string b1ASCII = HexToASCII(b1);
             //  Generate string key used for decryption through XORing
             string key(b1ASCII);
 
@@ -34,7 +34,7 @@ int main()
             for (int j = 0; j < key.length(); j++)
                 key[j] = i;
 
-            string ret = FixedASCIIXOR(b1ASCII, key);
+            string ret = ASCIIFixedXOR(b1ASCII, key);
 
             //  Evaluate returned string
             //  Discard all strings which contain special characters

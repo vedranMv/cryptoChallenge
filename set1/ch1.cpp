@@ -6,9 +6,9 @@
  *  Author: Vedran Mikov
  */
 #include <cstdlib>
-#include <cstdio>
 #include <string>
-#include "basicFunctions.h"
+#include <iostream>
+#include "../libs/basicFunctions.h"
 
 using namespace std;
 
