@@ -9,7 +9,7 @@ In an attempt to grasp basic concepts of cryptography and gain better understand
 ## Folder organization
 Project files are organized according to problems sets:
 
-*  **'set``*``'** folders (``*`` is integer corresponding to set number) containing :
+* **'set``*``'** folders (``*`` is integer corresponding to set number) containing :
   * Number of **ch``*``.cpp** (``*`` is integer corresponding to challenge number) files with solution to challenges within the set
   *  Any input/output files connected to the challenge, with prefix **ch``*``\_fileName**
 * **'libs'** folder containing:
