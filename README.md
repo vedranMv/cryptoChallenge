@@ -19,21 +19,21 @@ Project files are organized according to problems sets:
 
 ## Progress
 **Set 1**
-    1. [X]  Convert hex to base64
-    2. [X]  Fixed XOR
-    3. [X]  Single-byte XOR cipher
-    4. [X]  Detect single-character XOR
-    5. [X]  Implement repeating-key XOR
-    6. [X]  Break repeating-key XOR
-    7. [X]  AES in ECB mode
-    8. [X]  Detect AES in ECB mode
+ - [X]  Convert hex to base64
+ - [X]  Fixed XOR
+ - [X]  Single-byte XOR cipher
+ - [X]  Detect single-character XOR
+ - [X]  Implement repeating-key XOR
+ - [X]  Break repeating-key XOR
+ - [X]  AES in ECB mode
+ - [X]  Detect AES in ECB mode
 
 **Set 2**
-     9. [X]  Implement PKCS#7 padding
-    10. []  Implement CBC mode
-    11. []  An ECB/CBC detection oracle
-    12. []  Byte-at-a-time ECB decryption (Simple)
-    13. []  ECB cut-and-paste
-    14. []  Byte-at-a-time ECB decryption (Harder)
-    15. []  PKCS#7 padding validation
-    16. []  CBC bitflipping attacks
+ - [X]  Implement PKCS#7 padding
+ - []  Implement CBC mode
+ - []  An ECB/CBC detection oracle
+ - []  Byte-at-a-time ECB decryption (Simple)
+ - []  ECB cut-and-paste
+ - []  Byte-at-a-time ECB decryption (Harder)
+ - []  PKCS#7 padding validation
+ - []  CBC bitflipping attacks
