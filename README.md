@@ -18,7 +18,7 @@ Project files are organized according to problems sets:
   * **'unitt'** folder with files related to unit test of libraries in its parent folder
 
 ## Progress
-** Set 1**
+**Set 1**
     1. [X]  Convert hex to base64
     2. [X]  Fixed XOR
     3. [X]  Single-byte XOR cipher
@@ -28,7 +28,7 @@ Project files are organized according to problems sets:
     7. [X]  AES in ECB mode
     8. [X]  Detect AES in ECB mode
 
-** Set 2 **
+**Set 2**
      9. [X]  Implement PKCS#7 padding
     10. []  Implement CBC mode
     11. []  An ECB/CBC detection oracle
