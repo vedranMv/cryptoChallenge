@@ -20,6 +20,6 @@ int main()
     //  Given output (to evaluate result of algorithm)
     string output = "SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t";
 
-    cout<<HextoBase64(input)<<endl;
+    cout<<HexToBase64(input)<<endl;
     return 0;
 }

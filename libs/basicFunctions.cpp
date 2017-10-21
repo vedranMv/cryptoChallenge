@@ -2,6 +2,8 @@
  *    Implementation of basic functions required in set 1 of crypto challenge
  *    Description
  *
+ *      TODO: Implement decoding from base64 to ASCII
+ *
  *    Created: 20. Oct 2017.
  *    Author: Vedran Mikov
  */
@@ -73,6 +75,84 @@ uint8_t B64CharToInt(uint8_t arg)
 }
 
 //------------------------------------------------------------------------------
+//      Operations of data of any encoding                              [PUBLIC]
+//------------------------------------------------------------------------------
+/**
+ *  General repeat-key XOR function
+ *  Performs XOR between text and key for arbitrary key size. If key length is
+ *  shorter than text, it is repeated until the sizes match
+ *  @param text Text to encrypt with repeating key
+ *  @param key Arbitrary-length key to use for encryption of text variable
+ *  @param encod Encoding of text, key & result (one of ENC_* macros)
+ *  @return result of XOR operation in the same encoding as input arguments
+ */
+string RepeatKeyXOR(string const &text, string const &key, uint8_t encod)
+{
+    switch(encod)
+    {
+    case ENC_ASCII:
+        return ASCIIRepeatKeyXOR(text, key);
+    case ENC_BASE64:
+        return HexToBase64(HexRepeatKeyXOR(Base64ToHex(text), Base64ToHex(key)));
+    case ENC_HEX:
+        return HexRepeatKeyXOR(text, key);
+    }
+}
+/**
+ *  General fixed-key XOR function
+ *  Performs XOR between text and key for key size of the same length as text.
+ *  If key length is shorter than text, functions returns "ERROR"
+ *  @param text Text to encrypt
+ *  @param key Key to use for encryption of text variable
+ *  @param encod Encoding of text, key & result (one of ENC_* macros)
+ *  @return result of XOR operation in the same encoding as input arguments
+ */
+string FixedKeyXOR(string const &text, string const &key, uint8_t encod)
+{
+    switch(encod)
+    {
+    case ENC_ASCII:
+        return ASCIIFixedXOR(text, key);
+    case ENC_BASE64:
+        return HexToBase64(HexFixedXOR(Base64ToHex(text), Base64ToHex(key)));
+    case ENC_HEX:
+        return HexFixedXOR(text, key);
+    }
+}
+/**
+ *  Pad text string by appending  padding character until string reaches desired
+ *  length.
+ *  @param text Text to pad
+ *  @param paddingChar Padding character integer value to append to the end of
+ *  text, integer is converted to the right encoding before appending it
+ *  @param length Required length of returned string
+ *  @param encod Encoding of txt (one of ENC_* macros)
+ */
+string PadString(string const &text, uint8_t paddingChar, uint32_t length, uint8_t encod)
+{
+    string retVal(text);
+    string paddingASCII;
+
+
+    switch(encod)
+    {
+    case ENC_ASCII:
+        paddingASCII.resize(length-text.length(), paddingChar);
+        retVal += paddingASCII;
+        break;
+    case ENC_BASE64:
+        return "ERROR"; //  Illegal action
+    case ENC_HEX:
+        paddingASCII.resize((length-text.length())/2, paddingChar);
+        string paddingHex = ASCIIToHex(paddingASCII);
+        retVal += paddingHex;
+        break;
+    }
+
+    return retVal;
+}
+
+//------------------------------------------------------------------------------
 //      Operations on ASCII-encoded data                                [PUBLIC]
 //------------------------------------------------------------------------------
 /**
@@ -80,7 +160,7 @@ uint8_t B64CharToInt(uint8_t arg)
  *  @param arg Input ASCII string
  *  @return Corresponding Base64 string
  */
-string ASCIItoBase64(string const &arg)
+string ASCIIToBase64(string const &arg)
 {
     string retVal;
     uint32_t b64Len = 0, b64Pad = 0;
@@ -98,7 +178,7 @@ string ASCIItoBase64(string const &arg)
     }
 
     //  Allocate memory for output string
-    retVal.resize(b64Len + b64Pad, 0);
+    retVal.resize(b64Len, 0);
 
     //  Process input string by taking 3 chars at the time, combine them into a
     //  single decimal number
@@ -177,13 +257,19 @@ string ASCIIFixedXOR(string const &arg1,string const &arg2)
  */
 string ASCIIRepeatKeyXOR(string const &text, string const &key)
 {
-    //  Convert text to hex
-    string txtHex = ASCIIToHex(text);
-    //  Convert key to hex and repeat it as many times as need to have the same
-    //  length as text
-    string keyHex = ASCIIToHex(key, txtHex.length());
+//    Using native implementation, without HEX
+//    //  Convert text to hex
+//    string txtHex = ASCIIToHex(text);
+//    //  Convert key to hex and repeat it as many times as need to have the same
+//    //  length as text
+//    string keyHex = ASCIIToHex(key, txtHex.length());
 
-    return HexToASCII(HexFixedXOR(txtHex, keyHex));
+    //  Ensure key and text have matching lengths
+    string newKey;
+    for (uint32_t i = 0; i < text.length(); i++)
+        newKey += key[i % key.length()];
+
+    return ASCIIFixedXOR(text, newKey);
 }
 
 /**
@@ -372,7 +458,7 @@ string HexToASCII(string const &arg)
  *  @param arg Input HEX string
  *  @return Corresponding Base64 string
  */
-string HextoBase64(string const &arg)
+string HexToBase64(string const &arg)
 {
     string retVal;
     uint32_t b64Len = 0, b64Pad = 0;
@@ -434,6 +520,25 @@ string HexFixedXOR(string const &arg1,string const &arg2)
     }
 
     return retVal;
+}
+
+/**
+ *  Perform repeating-key XORing of given text and key. In this process, key is
+ *  extended by repeating original key to match the length of text string.
+ *  Result is returned as HEX-encoded string
+ *  @param text HEX text to encrypt with repeating key
+ *  @param key Arbitrary-length key to use for encryption of text variable
+ *  @return HEX result of repeated-key XORing of text and key
+ */
+string HexRepeatKeyXOR(string const &text, string const &key)
+{
+    string keyNew;
+
+    //  Ensure that text and key have matching sizes
+    for (uint32_t i = 0; i < text.length(); i++)
+        keyNew += key[i % key.length()];
+
+    return HexFixedXOR(text, keyNew);
 }
 
 /**

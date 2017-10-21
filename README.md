@@ -16,3 +16,24 @@ Project files are organized according to problems sets:
   * Header and source files of libraries made while solving problems
   * `librarize.bash` bash script which produces linkable library libbasicfunc.a to be used while compiling source files from **'set``*``'** folders
   * **'unitt'** folder with files related to unit test of libraries in its parent folder
+
+## Progress
+** Set 1**
+    1. [X]  Convert hex to base64
+    2. [X]  Fixed XOR
+    3. [X]  Single-byte XOR cipher
+    4. [X]  Detect single-character XOR
+    5. [X]  Implement repeating-key XOR
+    6. [X]  Break repeating-key XOR
+    7. [X]  AES in ECB mode
+    8. [X]  Detect AES in ECB mode
+
+** Set 2 **
+     9. [X]  Implement PKCS#7 padding
+    10. []  Implement CBC mode
+    11. []  An ECB/CBC detection oracle
+    12. []  Byte-at-a-time ECB decryption (Simple)
+    13. []  ECB cut-and-paste
+    14. []  Byte-at-a-time ECB decryption (Harder)
+    15. []  PKCS#7 padding validation
+    16. []  CBC bitflipping attacks

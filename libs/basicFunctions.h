@@ -7,20 +7,54 @@
 #include <string>
 #include <cstdint>
 
+//  Definitions of different char encodings
+#define ENC_ASCII      8
+#define ENC_BASE64     6
+#define ENC_HEX        4
+
+#define PAD_PKCS_N7     0x04
+
 using namespace std;
 
 /**
- *  Provides mapping of hex characters to their integer value
- *  Example: '0'->0, '9'->9, 'B'->11, 'f'->15
+ *  General repeat-key XOR function
+ *  Performs XOR between txt and key for arbitrary key size. If key length is
+ *  shorter than txt, it is repeated until the sizes match
+ *  @param text Text to encrypt with repeating key
+ *  @param key Arbitrary-length key to use for encryption of text variable
+ *  @param encod Encoding of txt, key & result (one of ENC_* macros)
+ *  @return result of XOR operation in the same encoding as input arguments
  */
-uint8_t HexCharToInt (int8_t const &arg);
+string RepeatKeyXOR(string const &text, string const &key, uint8_t encod);
+/**
+ *  General fixed-key XOR function
+ *  Performs XOR between txt and key for key size of the same length as txt. If
+ *  key length is shorter than txt, functions returns "ERROR"
+ *  @param text Text to encrypt
+ *  @param key Key to use for encryption of text variable
+ *  @param encod Encoding of txt, key & result (one of ENC_* macros)
+ *  @return result of XOR operation in the same encoding as input arguments
+ */
+string FixedKeyXOR(string const &text, string const &key, uint8_t encod);
+/**
+ *  Pad txt string by appending  padding character until stirng reaches desired
+ *  length.
+ *  @param txt Text to pad
+ *  @param paddingChar Padding character integer value to append to the end of
+ *  text, integer is converted to the right encoding before appending it
+ *  @param length Required length of returned string
+ *  @param encod Encoding of txt (one of ENC_* macros)
+ */
+string PadString(string const &text, uint8_t paddingChar, uint32_t length, uint8_t encod);
+
+
 
 /**
  *  Convert input ASCII string into a Base64 string
  *  @param arg Input ASCII string
  *  @return Corresponding Base64 string
  */
-string ASCIItoBase64(string const &arg);
+string ASCIIToBase64(string const &arg);
 /**
  *  Convert input ASCII string to hex string. Additionally, if length is supplied
  *  function will repeat input string for as many time needed to reach the length.
@@ -42,7 +76,7 @@ string ASCIIFixedXOR(string const &arg1,string const &arg2);
  *  extended by repeating original key to match the length of text string.
  *  Result is returned as HEX-encoded string
  *  @param text ASCII text to encrypt with repeating key
- *  @param key Arbitrary length key to use for encryption of text variable
+ *  @param key Arbitrary-length key to use for encryption of text variable
  *  @return ASCII result of repeated-key XORing of text and key
  */
 string ASCIIRepeatKeyXOR(string const &text, string const &key);
@@ -94,11 +128,16 @@ uint32_t Base64DistHamming(string const &arg1, string const &arg2);
 
 
 /**
+ *  Provides mapping of hex characters to their integer value
+ *  Example: '0'->0, '9'->9, 'B'->11, 'f'->15
+ */
+uint8_t HexCharToInt (int8_t const &arg);
+/**
  *  Convert HEX-encoded string into its ASCII representation
  *  @param arg HEX-encoded string to decode
  *  @return ASCII representation of input string
  */
-string HextoBase64(string const &arg);
+string HexToBase64(string const &arg);
 /**
  *  Convert input HEX string into a Base64 string
  *  @param arg Input HEX string
@@ -112,6 +151,15 @@ string HexToASCII(string const &arg);
  *  @return HEX-encoded result of XOR operator on two inputs
  */
 string HexFixedXOR(string const &arg1,string const &arg2);
+/**
+ *  Perform repeating-key XORing of given text and key. In this process, key is
+ *  extended by repeating original key to match the length of text string.
+ *  Result is returned as HEX-encoded string
+ *  @param text HEX text to encrypt with repeating key
+ *  @param key Arbitrary-length key to use for encryption of text variable
+ *  @return HEX result of repeated-key XORing of text and key
+ */
+string HexRepeatKeyXOR(string const &text, string const &key);
 /**
  *  Calculate Hamming distance between two equal-length HEX-encoded strings
  *  To do so, chars at the same index are XORed which produces 1 at the position
