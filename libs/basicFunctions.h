@@ -12,7 +12,6 @@
 #define ENC_BASE64     6
 #define ENC_HEX        4
 
-#define PAD_PKCS_N7     0x04
 
 using namespace std;
 
@@ -41,11 +40,12 @@ string FixedKeyXOR(string const &text, string const &key, uint8_t encod);
  *  length.
  *  @param txt Text to pad
  *  @param paddingChar Padding character integer value to append to the end of
- *  text, integer is converted to the right encoding before appending it
+ *  text, integer is converted to the right encoding before appending it ( if
+ *  left -1 padding is done according to PKCS#7 scheme)
  *  @param length Required length of returned string
  *  @param encod Encoding of txt (one of ENC_* macros)
  */
-string PadString(string const &text, uint8_t paddingChar, uint32_t length, uint8_t encod);
+string PadString(string const &text, uint32_t length, uint8_t encod, int8_t paddingChar = -1);
 
 
 

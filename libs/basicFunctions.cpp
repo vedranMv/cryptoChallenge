@@ -75,7 +75,7 @@ uint8_t B64CharToInt(uint8_t arg)
 }
 
 //------------------------------------------------------------------------------
-//      Operations of data of any encoding                              [PUBLIC]
+//      Operations on data of any encoding                              [PUBLIC]
 //------------------------------------------------------------------------------
 /**
  *  General repeat-key XOR function
@@ -128,11 +128,13 @@ string FixedKeyXOR(string const &text, string const &key, uint8_t encod)
  *  @param length Required length of returned string
  *  @param encod Encoding of txt (one of ENC_* macros)
  */
-string PadString(string const &text, uint8_t paddingChar, uint32_t length, uint8_t encod)
+string PadString(string const &text, uint32_t length, uint8_t encod, int8_t paddingChar)
 {
     string retVal(text);
     string paddingASCII;
 
+    //  Calculate padding character based on difference in length (PCSK#7 scheme)
+    paddingChar = length - text.length();
 
     switch(encod)
     {

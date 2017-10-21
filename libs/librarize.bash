@@ -1,10 +1,17 @@
 #!/bin/bash
 
 # Compile sources into object files
-g++ -std=c++11 -c basicFunctions.cpp
-g++ -std=c++11 -c aes-openSSL.cpp -lcrypto
-# Merge objects into a linkable library
-ar rcs libmycrypto.a basicFunctions.o aes-openSSL.o
+
+## Process basic library (data encodings, XOR implementation...)
+g++ -std=c++11 -fPIC -O -g basicFunctions.cpp -c -o basicFunctions.o
+
+## Process AES library (EBC/CBD AES encryption/decryption)
+g++ -std=c++11 -fPIC -O -g aes-openSSL.cpp -c -o aes-openSSL.o
+
+## Merge
+g++ -shared basicFunctions.o aes-openSSL.o -lcrypto -o libmycrypto.so 
+
+
 # Housekeeping
 rm basicFunctions.o
 rm aes-openSSL.o

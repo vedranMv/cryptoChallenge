@@ -44,9 +44,9 @@ int main()
         string tmp;
         //  Here we split the ciphertext in 16byte-long blocks -> in HEX one 1
         //  byte is 2 HEX characters, ergo i%32
-        for (uint32_t i = 0; i < b1.length(); i++)
+        for (uint32_t i = 1; i <=b1.length(); i++)
         {
-            tmp += b1[i];
+            tmp += b1[i-1];
             if ((i % 32) == 0)
             {
                 block.push_back(tmp);
