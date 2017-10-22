@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
-#include "../libs/basicFunctions.h"
+#include "../libs/mycrypto-basic.h"
 
 using namespace std;
 
@@ -20,6 +20,6 @@ int main()
     //  Given output (to evaluate result of algorithm)
     string output = "YELLOW SUBMARINE\x04\x04\x04\x04";
 
-    cout<<(PadString(input, PAD_PKCS_N7, 20, ENC_ASCII) == output)<<endl;
+    cout<<(PadString(input, 20, ENC_ASCII) == output)<<endl;
     return 0;
 }

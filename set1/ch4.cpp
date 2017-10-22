@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <iostream>
 #include <fstream>
-#include "../libs/basicFunctions.h"
+#include "../libs/mycrypto-basic.h"
 
 using namespace std;
 

@@ -1,11 +1,12 @@
 #define CATCH_CONFIG_MAIN
 
-#include "catch.hpp"
-#include "../aes-openSSL.h"
-#include "../basicFunctions.h"
 #include <string>
-#include "testCases.h"
 
+#include "catch.hpp"
+
+#include "testCases.h"
+#include "../mycrypto-basic.h"
+#include "../mycrypto-aes.h"
 
 
 /**

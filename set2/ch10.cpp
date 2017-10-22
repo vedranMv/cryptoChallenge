@@ -14,8 +14,8 @@
 #include <vector>
 #include <fstream>
 
-#include "../libs/basicFunctions.h"
-#include "../libs/aes-openSSL.h"
+#include "../libs/mycrypto-basic.h"
+#include "../libs/mycrypto-aes.h"
 
 #include <string>
 

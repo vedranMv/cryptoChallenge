@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
-#include "../libs/basicFunctions.h"
+#include "../libs/mycrypto-basic.h"
 
 using namespace std;
 

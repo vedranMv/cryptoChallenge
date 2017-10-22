@@ -14,7 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdint>
-#include "../libs/basicFunctions.h"
+#include "../libs/mycrypto-basic.h"
 
 //  Used for sorting distances
 #include <vector>

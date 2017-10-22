@@ -9,8 +9,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include "../libs/basicFunctions.h"
-#include "../libs/aes-openSSL.h"
+#include "../libs/mycrypto-basic.h"
+#include "../libs/mycrypto-aes.h"
 
 using namespace std;
 
@@ -32,12 +32,12 @@ int main()
 
     InitAES128EBC();
 
-    secure_string   ctext = HexToASCII(Base64ToHex(txtStr)).c_str(), rtext;
-    byte    key[17] = {"YELLOW SUBMARINE"},
-            iv [17] = {0x48};
+    string  ciphertext = HexToASCII(Base64ToHex(txtStr)).c_str(), rtext;
+    string  key = "YELLOW SUBMARINE",
+            iv(17,0x48);
 
 
-    aes_decrypt(key, iv, ctext, rtext);
+    rtext = AESEBCDecryptText(key, iv, ciphertext);
 
     cout<<"Decrypting, check output file decrypted.out";
 

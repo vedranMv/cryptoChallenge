@@ -9,13 +9,13 @@ In an attempt to grasp basic concepts of cryptography and gain better understand
 ## Folder organization
 Project files are organized according to problems sets:
 
-* **'set``*``'** folders (``*`` is integer corresponding to set number) containing :
+* **'set``*``/'** folders (``*`` is integer corresponding to set number) containing :
   * Number of **ch``*``.cpp** (``*`` is integer corresponding to challenge number) files with solution to challenges within the set
-  *  Any input/output files connected to the challenge, with prefix **ch``*``\_fileName**
-* **'libs'** folder containing:
-  * Header and source files of libraries made while solving problems
-  * `librarize.bash` bash script which produces linkable library libbasicfunc.a to be used while compiling source files from **'set``*``'** folders
-  * **'unitt'** folder with files related to unit test of libraries in its parent folder
+  *  Any input/output files connected to the challenge, with prefix **ch``*``\_**
+* **'libs'** folder containing ``mycrypto`` library developed while solving problems:
+  * Header and source files of different modules (so far ``mycrypto-aes`` and ``mycrypto-basic``)
+  * `librarize.bash` bash script which produces linkable shared library ``libmycrypto.so`` from sources to be used while compiling files from **'set``*``/'** folders
+  * **'unitt/'** folder with files related to unit test of mycrypto library in its parent folder
 
 ## Progress
 **Set 1**
