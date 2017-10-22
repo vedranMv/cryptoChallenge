@@ -94,12 +94,39 @@ void aes_decrypt(const byte key[AES_ECB_BLOCK_SIZE],
 
 
 /**
- *  Load OpenSSL cipher
+ *  Initialize AES engine and seed rand number generator
  */
 void InitAES128EBC()
 {
     // Load the necessary cipher
     EVP_add_cipher(EVP_aes_128_ecb());
+
+    //  Initialize random number generator
+    srand(time(NULL));
+}
+
+/**
+ *  Generate a random string of specified length
+ *  @param keySize Desired length of returned string
+ *  @return Random string with characters in ASCII range between [32,126]
+ */
+string AESGenerateRandString(const uint8_t keySize, bool spec)
+{
+    string retVal(keySize, 0x00);
+
+    uint8_t i = 0;
+    while (i < keySize)
+    {
+        int8_t rndChar = rand() % 128;
+
+        //  Prevent special chars in key
+        if (((rndChar < 32) || (rndChar == 127)) && !spec)
+            continue;
+
+        retVal[i++] = rndChar;
+    }
+
+    return retVal;
 }
 
 //------------------------------------------------------------------------------

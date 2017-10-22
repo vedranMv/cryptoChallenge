@@ -72,6 +72,9 @@ uint8_t B64CharToInt(uint8_t arg)
     //  '/' is 63
     if (arg == '/')
         return 63;
+
+    //  For invalid digit return 127
+    return 127;
 }
 
 //------------------------------------------------------------------------------
@@ -96,6 +99,8 @@ string RepeatKeyXOR(string const &text, string const &key, uint8_t encod)
         return HexToBase64(HexRepeatKeyXOR(Base64ToHex(text), Base64ToHex(key)));
     case ENC_HEX:
         return HexRepeatKeyXOR(text, key);
+    default:
+        return "ERROR";
     }
 }
 /**
@@ -117,6 +122,8 @@ string FixedKeyXOR(string const &text, string const &key, uint8_t encod)
         return HexToBase64(HexFixedXOR(Base64ToHex(text), Base64ToHex(key)));
     case ENC_HEX:
         return HexFixedXOR(text, key);
+    default:
+        return "ERROR";
     }
 }
 /**
@@ -197,7 +204,7 @@ string ASCIIToBase64(string const &arg)
             retVal[(i/3)*4 + (3-j)] = charSet[(chunk24bit >> (6*j)) & 0x3F];
     }
 
-    for (int8_t j = 0; j < b64Pad; j++)
+    for (uint8_t j = 0; j < b64Pad; j++)
         retVal += "=";
 
     return retVal;
@@ -220,7 +227,7 @@ string ASCIIToHex(string const &arg, uint32_t length)
 
     retVal.resize(length, 0);
 
-    for (int i = 0; i <length; i+=2)
+    for (uint32_t i = 0; i <length; i+=2)
     {
         retVal[i] = IntToHexChar((arg[((i/2)%arg.length())]>>4) & 0x0F);
         retVal[i+1] = IntToHexChar(arg[((i/2)%arg.length())] & 0x0F);
@@ -323,7 +330,7 @@ bool validASCIIString(string const &arg, bool lc, bool uc, bool num, bool sent,
 {
     bool valid = true;
 
-    for (int i = 0; (i < arg.length()) && valid; i++)
+    for (uint32_t i = 0; (i < arg.length()) && valid; i++)
     {
         //  Check if it's upper case and we want upper case
         if ((arg[i] > 64) && (arg[i] < 91))
@@ -443,11 +450,9 @@ uint32_t Base64DistHamming(string const &arg1, string const &arg2)
 string HexToASCII(string const &arg)
 {
     string retVal;
-    uint32_t i = 0;
-
     retVal.resize(arg.length()/2, 0);
 
-    for (i; i < arg.length(); i+=2)
+    for (uint32_t i = 0; i < arg.length(); i+=2)
     {
         retVal[i/2] = ((HexCharToInt(arg[i])<<4) | HexCharToInt(arg[i+1]));
     }
@@ -496,7 +501,7 @@ string HexToBase64(string const &arg)
             retVal[(i/6)*4 + (3-j)] = charSet[(chunk24bit >> (6*j)) & 0x3F];
     }
 
-    for (int8_t j = b64Len; j < (b64Len+b64Pad); j++)
+    for (uint32_t j = b64Len; j < (b64Len+b64Pad); j++)
         retVal[j] = '=';
 
     return retVal;

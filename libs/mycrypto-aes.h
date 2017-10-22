@@ -15,8 +15,18 @@ using namespace std;
 //  Zero initialization vector, used when no initialization vector is given
 const std::string zeroVect(AES_ECB_BLOCK_SIZE, 0x00);
 
-
+/**
+ *  Initialize AES engine and seed rand number generator
+ */
 void InitAES128EBC();
+/**
+ *  Generate a random string of specified length
+ *  @param keySize Desired length of returned string
+ *  @param spec If true allows generator to use special ASCII chars (127, <32),
+ *  else generated string consists only of readable characters [32,126]
+ *  @return Random ASCII string of specified length
+ */
+string AESGenerateRandString(const uint8_t keySize, bool spec = false);
 /**
  *  AES-128 CBC encryption of a single block
  *  @param key Key for encryption
